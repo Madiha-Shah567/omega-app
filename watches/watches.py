@@ -1,4 +1,5 @@
 import streamlit as st
+import os
 
 # ✅ GitHub Image Handling (Raw URLs)
 GITHUB_USERNAME = "Madiha-Shah567"
@@ -6,10 +7,10 @@ GITHUB_REPO = "watches-app"
 IMAGES_FOLDER = "images"
 GITHUB_BASE_URL = f"https://raw.githubusercontent.com/{GITHUB_USERNAME}/{GITHUB_REPO}/main/{IMAGES_FOLDER}/"
 
-# ✅ Watch Data with GitHub Images
+# ✅ Watch Data with Images (Local + GitHub)
 watches = {
     "Rolex Submariner": {
-        "image": f"{GITHUB_BASE_URL}rolex.jpg",
+        "image": "images/roni.jpg",
         "features": [
             "✅ Waterproof up to 300m",
             "✅ Automatic movement",
@@ -21,7 +22,7 @@ watches = {
         ],
     },
     "Omega Speedmaster": {
-        "image": f"{GITHUB_BASE_URL}omega.jpg",
+        "image": "images/omega.jpg",
         "features": [
             "✅ Chronograph function",
             "✅ Manual winding movement",
@@ -45,8 +46,12 @@ selected_watch = st.radio("Select a Watch", list(watches.keys()), horizontal=Tru
 if selected_watch:
     watch_data = watches[selected_watch]
 
-    # ✅ Show Image from GitHub
-    st.image(watch_data["image"], caption=selected_watch, use_container_width=True)
+    # ✅ Check if Local Image Exists, Else Use GitHub
+    image_path = watch_data["image"]
+    if os.path.exists(image_path):
+        st.image(image_path, caption=selected_watch, use_container_width=True)
+    else:
+        st.image(f"{GITHUB_BASE_URL}{os.path.basename(image_path)}", caption=selected_watch, use_container_width=True)
 
     # ✅ Show Features
     st.subheader("Features")
